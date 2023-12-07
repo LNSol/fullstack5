@@ -45,6 +45,16 @@ const My = () => {
     }
   };
 
+  const setDirty = () => {
+    const name = nameRef.current?.value;
+    const price = priceRef.current?.value;
+    const origin = itemRef.current;
+
+    setIsDirty(
+      isEdit && (origin.name !== name || origin.price !== Number(price))
+    );
+  };
+
   return (
     <>
       {loginUser ? <Profile /> : <Login />}
@@ -73,28 +83,8 @@ const My = () => {
       </ul>
       <form onSubmit={saveItem}>
         <input type='number' hidden ref={idRef} />
-        상품명:{' '}
-        <input
-          type='text'
-          ref={nameRef}
-          onChange={() => {
-            const name = nameRef.current?.value;
-            const origin = itemRef.current;
-            if (isEdit && origin.name !== name) setIsDirty(true);
-            else setIsDirty(false);
-          }}
-        />
-        &nbsp; 가격:{' '}
-        <input
-          type='number'
-          ref={priceRef}
-          onChange={() => {
-            const price = priceRef.current?.value || 0;
-            const origin = itemRef.current;
-            if (isEdit && origin.price !== Number(price)) setIsDirty(true);
-            else setIsDirty(false);
-          }}
-        />
+        상품명: <input type='text' ref={nameRef} onChange={setDirty} />
+        &nbsp; 가격: <input type='number' ref={priceRef} onChange={setDirty} />
         원&nbsp;
         {!isEdit ? (
           <button>추가</button>

@@ -1,12 +1,13 @@
 import { ReactNode, createContext, useContext, useState } from 'react';
 import { DefaultSession } from '../dummy';
+import { replaceElement } from '../utils/utils';
 
 type SessionContextType = {
   session: Session;
   login: (loginUser: { id: number; name: string }) => void;
   logout: () => void;
   removeCartItem: (itemId: number) => void;
-  addCartItem: (newItem: { name: string; price: number }) => void;
+  saveCartItem: (item: { id?: number; name: string; price: number }) => void;
 };
 
 const SessionContext = createContext<SessionContextType>({
@@ -14,7 +15,7 @@ const SessionContext = createContext<SessionContextType>({
   login: () => {},
   logout: () => {},
   removeCartItem: () => {},
-  addCartItem: () => {},
+  saveCartItem: () => {},
 });
 
 const SessionProvider = ({ children }: { children: ReactNode }) => {
@@ -41,20 +42,26 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  const addCartItem = (newItem: { name: string; price: number }) => {
+  const saveCartItem = (item: { id?: number; name: string; price: number }) => {
     setSession((prevSession) => {
-      const nextItemId =
-        Math.max(...prevSession.cart.map(({ id }) => id), 0) + 1;
+      const id =
+        item.id || Math.max(...prevSession.cart.map(({ id }) => id), 0) + 1;
+      const idx = prevSession.cart.findIndex(({ id: itemId }) => itemId === id);
+
+      const newItem = { ...item, id };
       return {
         ...prevSession,
-        cart: [...prevSession.cart, { id: nextItemId, ...newItem }],
+        cart:
+          idx < 0
+            ? [...prevSession.cart, newItem]
+            : replaceElement(prevSession.cart, idx, newItem),
       };
     });
   };
 
   return (
     <SessionContext.Provider
-      value={{ session, login, logout, removeCartItem, addCartItem }}
+      value={{ session, login, logout, removeCartItem, saveCartItem }}
     >
       {children}
     </SessionContext.Provider>

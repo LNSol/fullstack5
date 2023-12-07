@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
   extends: [
     'eslint:recommended',
@@ -20,10 +21,11 @@ module.exports = {
   },
   plugins: [
     'react-refresh',
-    '@typescript-eslint',
+    // '@typescript-eslint',
     'react-hooks',
     'jsx-a11y',
-    'prettier',
+    // 'prettier',
+    // 'react',
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
@@ -34,7 +36,9 @@ module.exports = {
     'prettier/prettier': 'error',
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     'react/display-name': 'off',
-    '@typescript-eslint/no-duplicate-imports': 'warn',
+    'react/no-array-index-key': 'error',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    'react-refresh/only-export-components': 'warn',
   },
   settings: {
     react: { version: 'detect' },

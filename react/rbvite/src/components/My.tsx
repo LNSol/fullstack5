@@ -10,36 +10,39 @@ const My = () => {
     removeCartItem,
     saveCartItem,
   } = useSession();
-  const [isEdit, setIsEdit] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
-  const itemRef = useRef<Cart[number]>({ id: 0, name: '', price: 0 });
-  const idRef = useRef<HTMLInputElement>(null);
+  const [id, setId] = useState(0);
   const nameRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
 
   const { useTimeout } = useTimer();
   useTimeout(() => console.log('My!!!'), 1000);
 
-  const saveItem = (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    const id = idRef.current;
-    const name = nameRef.current?.value;
-    const price = priceRef.current?.value;
-
-    if (id && name && price) {
-      saveCartItem({ id: Number(id.value), name, price: Number(price) });
-      idRef.current.value = '';
+  const clearForm = () => {
+    if (nameRef.current && priceRef.current) {
       nameRef.current.value = '';
       priceRef.current.value = '';
-      itemRef.current = { id: 0, name: '', price: 0 };
-      setIsEdit(false);
+      setId(0);
       setIsDirty(false);
     }
   };
 
+  const saveItem = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
+    if (nameRef.current && priceRef.current) {
+      saveCartItem({
+        id,
+        name: nameRef.current.value,
+        price: Number(priceRef.current.value),
+      });
+    }
+    clearForm();
+  };
+
   const setForm = ({ id, name, price }: Cart[number]) => {
-    if (idRef.current && nameRef.current && priceRef.current) {
-      idRef.current.value = id.toString();
+    if (nameRef.current && priceRef.current) {
+      setId(id);
       nameRef.current.value = name;
       priceRef.current.value = price.toString();
     }
@@ -47,12 +50,11 @@ const My = () => {
 
   const setDirty = () => {
     const name = nameRef.current?.value;
-    const price = priceRef.current?.value;
-    const origin = itemRef.current;
+    const price = Number(priceRef.current?.value);
 
-    setIsDirty(
-      isEdit && (origin.name !== name || origin.price !== Number(price))
-    );
+    const item = cart.find(({ id: itemId }) => itemId === id);
+
+    setIsDirty(item?.name !== name || item?.price !== price);
   };
 
   return (
@@ -60,20 +62,15 @@ const My = () => {
       {loginUser ? <Profile /> : <Login />}
       <ul>
         {cart.map(({ id, name, price }) => (
-          <li
-            key={id}
-            onClick={() => {
-              itemRef.current = { id, name, price };
-              setIsEdit(true);
-              setForm({ id, name, price });
-            }}
-            aria-hidden
-          >
-            {name}({price})
+          <li key={id}>
+            <a href='##' onClick={() => setForm({ id, name, price })}>
+              {name}({price})
+            </a>
             <button
               onClick={(evt) => {
                 evt.stopPropagation();
                 removeCartItem(id);
+                clearForm();
               }}
             >
               DEL
@@ -82,15 +79,10 @@ const My = () => {
         ))}
       </ul>
       <form onSubmit={saveItem}>
-        <input type='number' hidden ref={idRef} />
         상품명: <input type='text' ref={nameRef} onChange={setDirty} />
         &nbsp; 가격: <input type='number' ref={priceRef} onChange={setDirty} />
         원&nbsp;
-        {!isEdit ? (
-          <button>추가</button>
-        ) : isDirty ? (
-          <button>저장</button>
-        ) : null}
+        {!id ? <button>추가</button> : isDirty ? <button>저장</button> : null}
       </form>
     </>
   );

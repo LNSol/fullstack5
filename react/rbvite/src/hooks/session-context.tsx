@@ -1,6 +1,13 @@
-import { ReactNode, createContext, useContext, useState } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { DefaultSession } from '../dummy';
 import { replaceElement } from '../utils/utils';
+import { useFetch } from './fetch-hook';
 
 type SessionContextType = {
   session: Session;
@@ -20,6 +27,7 @@ const SessionContext = createContext<SessionContextType>({
 
 const SessionProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session>(DefaultSession);
+  const data = useFetch<Session>('/data/sample.json');
 
   const login = (loginUser: { id: number; name: string }) => {
     setSession((prevSession) => ({
@@ -58,6 +66,13 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
       };
     });
   };
+
+  useEffect(() => {
+    if (data) {
+      setSession(data);
+    }
+    console.log('SESSION CONTEXT >>> ', data);
+  }, [data]);
 
   return (
     <SessionContext.Provider

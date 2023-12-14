@@ -1,10 +1,21 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
-import { useSession } from '../hooks/session-context';
+import {
+  ChangeEvent,
+  FormEvent,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+// import { useSession } from '../hooks/session-context';
 import { useCounter } from '../hooks/counter-context';
 
-const Login = () => {
+type Props = {
+  login: (loginUser: LoginUser) => void;
+};
+
+const Login = memo(({ login }: Props) => {
   console.log('Login@@@');
-  const { login } = useSession();
+  // const { login } = useSession();
   const { plusCount, minusCount } = useCounter();
   const [id, setId] = useState('');
   // const [name, setName] = useState('');
@@ -40,5 +51,5 @@ const Login = () => {
       <button type='submit'>Login</button>
     </form>
   );
-};
+});
 export default Login;

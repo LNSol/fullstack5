@@ -9,6 +9,7 @@ const My = () => {
     session: { loginUser, cart },
     removeCartItem,
     saveCartItem,
+    login,
   } = useSession();
   const [isDirty, setIsDirty] = useState(false);
   const [id, setId] = useState(0);
@@ -59,7 +60,7 @@ const My = () => {
 
   return (
     <>
-      {loginUser ? <Profile /> : <Login />}
+      {loginUser ? <Profile /> : <Login login={login} />}
       <ul>
         {cart.map(({ id, name, price }) => (
           <li key={id}>

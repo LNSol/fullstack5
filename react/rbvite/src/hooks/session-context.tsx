@@ -1,6 +1,7 @@
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
@@ -66,8 +67,11 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
   );
   const data = useFetch<Session>('/data/sample.json');
 
-  const login = (loginUser: { id: number; name: string }) =>
-    dispatchSession({ type: 'LOGIN', payload: loginUser });
+  const login = useCallback(
+    (loginUser: LoginUser) =>
+      dispatchSession({ type: 'LOGIN', payload: loginUser }),
+    []
+  );
 
   const logout = () => dispatchSession({ type: 'LOGOUT' });
 

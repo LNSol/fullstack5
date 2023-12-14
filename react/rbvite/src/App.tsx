@@ -4,10 +4,17 @@ import My from './components/My';
 import './App.css';
 import { useCounter } from './hooks/counter-context';
 import { SessionProvider } from './hooks/session-context';
+import { useCallback } from 'react';
 
 function App() {
   console.log('App@@@');
-  const { count } = useCounter();
+  const { count, plusCount } = useCounter();
+
+  const fn = useCallback(() => {
+    console.log('parents.fn@@@');
+  }, []);
+
+  // const MemoedHello = memo(Hello, () => true);
 
   return (
     <>
@@ -15,9 +22,13 @@ function App() {
       <SessionProvider>
         <My />
       </SessionProvider>
-      <Hello name='홍길동' age={30}>
+      <Hello name='홍길동' age={30} fn={fn}>
         <h3>반갑습니다~</h3>
       </Hello>
+      {/* <MemoedHello name='홍길동' age={30} fn={fn}>
+        <h3>반갑습니다~</h3>
+      </MemoedHello> */}
+      <button onClick={plusCount}>count + 1</button>
     </>
   );
 }

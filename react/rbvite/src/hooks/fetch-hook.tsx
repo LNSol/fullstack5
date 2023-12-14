@@ -12,6 +12,7 @@ const fetchByCache = (function () {
     setter: Dispatch<SetStateAction<T | null>>,
     init?: RequestInit
   ) {
+    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%', cache);
     if (url in cache) {
       console.log('url in cache!@@@@', cache);
       setter(cache[url] as T);
@@ -36,7 +37,7 @@ export function useFetch<T>(url: string): T | null {
     fetchByCache<T>(url, setData, { signal });
 
     return () => controller.abort();
-  }, [url]);
+  }, []);
 
   return data;
 }

@@ -63,7 +63,7 @@ const My = () => {
       <ul>
         {cart.map(({ id, name, price }) => (
           <li key={id}>
-            <a href='##' onClick={() => setForm({ id, name, price })}>
+            <a href='#none' onClick={() => setForm({ id, name, price })}>
               {name}({price})
             </a>
             <button

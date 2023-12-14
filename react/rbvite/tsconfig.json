@@ -19,6 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
+
+    /**/
+    // "strictPropertyInitialization": false
   },
   "include": ["src", "types/*.d.ts", "src/dummy.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

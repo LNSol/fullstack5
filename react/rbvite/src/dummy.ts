@@ -1,4 +1,4 @@
-export const DefaultSession = {
+export const DefaultSession: Session = {
   loginUser: null,
   cart: [
     { id: 100, name: '라면', price: 3000 },

@@ -20,15 +20,16 @@
 // };
 // export default Sample;
 
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+// import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 
-const Sample = () => {
-  return (
-    <div>
-      국어: <input />
-      수학: <input />
-      영어: <input />
-    </div>
-  );
-};
-export default Sample;
+// const Sample = () => {
+//   return (
+//     <div>
+//       국어: <input />
+//       수학: <input />
+//       영어: <input />
+//       <button
+//     </div>
+//   );
+// };
+// export default Sample;

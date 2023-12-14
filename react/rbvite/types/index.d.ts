@@ -6,3 +6,10 @@ type Session = {
   loginUser: LoginUser | null;
   cart: Cart;
 };
+
+type SessionAction =
+  | { type: 'LOGIN'; payload: LoginUser }
+  | { type: 'LOGOUT'; payload?: null }
+  | { type: 'SAVE_CART'; payload: { id?: number; name: string; price: number } }
+  | { type: 'REMOVE_CART'; payload: number }
+  | { type: 'SET'; payload: Session };

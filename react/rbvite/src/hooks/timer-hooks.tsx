@@ -8,7 +8,8 @@ const useTimeout = <T extends (...args: unknown[]) => V, V = void>(
   useEffect(() => {
     const tmout = setTimeout(callback, delay, ...args);
     return () => clearTimeout(tmout);
-  }, [callback, delay, args]);
+    // }, [callback, delay, args]);
+  }, []);
 };
 
 function useInterval<T extends (...args: unknown[]) => V, V = void>(
@@ -17,9 +18,10 @@ function useInterval<T extends (...args: unknown[]) => V, V = void>(
   args: unknown[] = []
 ) {
   useEffect(() => {
-    const intl = setInterval(callback, delay);
+    const intl = setInterval(callback, delay, ...args);
     return () => clearInterval(intl);
-  }, [callback, delay, args]);
+    // }, [callback, delay, args]);
+  }, []);
 }
 
 function useTimer() {

@@ -9,7 +9,7 @@ const fetchByCache = (function () {
 
   return function <T>(
     url: string,
-    setter: Dispatch<SetStateAction<T | null>>,
+    setter: Dispatch<SetStateAction<T | undefined>>,
     init?: RequestInit
   ) {
     console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%', cache);
@@ -28,10 +28,11 @@ const fetchByCache = (function () {
   };
 })();
 
-export function useFetch<T>(url: string): T | null {
-  const [data, setData] = useState<T | null>(null);
+export function useFetch<T>(url: string, cachedData?: T): T | undefined {
+  const [data, setData] = useState<T | undefined>(cachedData);
 
   useEffect(() => {
+    if (cachedData) return;
     const controller = new AbortController();
     const { signal } = controller;
     fetchByCache<T>(url, setData, { signal });

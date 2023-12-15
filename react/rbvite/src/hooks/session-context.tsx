@@ -51,7 +51,7 @@ const reducer: SessionReducer = (session, { type, payload }) => {
   switch (type) {
     case 'LOGIN':
     case 'LOGOUT': {
-      newSession = { ...session, loginUser: null };
+      newSession = { ...session, loginUser: payload };
       // localStorage.setItem('SESSION', JSON.stringify(newSession));
       // sessionBrowserStorage.set(newSession);
       // return newSession;
@@ -101,7 +101,7 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
     DefaultSession
   );
   // const { get: getSession, set: setSession } = useStorage<Session>('SESSION'); // hook으로 사용하면 reducer에서 set할 수가 없음.
-  const data = useFetch<Session>('/data/sample.json');
+  const data = useFetch<Session>('/data/sample.json', getSession());
 
   const login = useCallback(
     (loginUser: LoginUser) =>
@@ -169,13 +169,16 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // const sessionInStorage = sessionBrowserStorage.get();
-    const sessionInStorage = getSession();
     // const sessionInStorage = JSON.parse(localStorage.getItem('SESSION') || '');
-    if (sessionInStorage) {
-      dispatchSession({ type: 'SET', payload: sessionInStorage });
-    } else if (data) {
-      dispatchSession({ type: 'SET', payload: data });
-    }
+
+    // const sessionInStorage = getSession();
+    // if (sessionInStorage) {
+    //   dispatchSession({ type: 'SET', payload: sessionInStorage });
+    // } else if (data) {
+    //   dispatchSession({ type: 'SET', payload: data });
+    // }
+
+    if (data) dispatchSession({ type: 'SET', payload: data });
 
     // dispatchSession({ type: 'SET', payload: session });
   }, [data]);

@@ -38,13 +38,7 @@ type SessionReducer = (session: Session, action: SessionAction) => Session;
 const reducer: SessionReducer = (session, { type, payload }) => {
   let newSession;
   switch (type) {
-    case 'LOGIN': {
-      newSession = { ...session, loginUser: payload };
-      // localStorage.setItem('SESSION', JSON.stringify(newSession));
-      // sessionBrowserStorage.set(newSession);
-      // return newSession;
-      break;
-    }
+    case 'LOGIN':
     case 'LOGOUT': {
       newSession = { ...session, loginUser: null };
       // localStorage.setItem('SESSION', JSON.stringify(newSession));
@@ -53,21 +47,22 @@ const reducer: SessionReducer = (session, { type, payload }) => {
       break;
     }
     case 'SAVE_CART': {
-      const id =
-        payload.id || Math.max(...session.cart.map(({ id }) => id), 0) + 1;
-      const idx = session.cart.findIndex(({ id: itemId }) => itemId === id);
+      // const id =
+      //   payload.id || Math.max(...session.cart.map(({ id }) => id), 0) + 1;
+      // const idx = session.cart.findIndex(({ id: itemId }) => itemId === id);
 
-      const newItem = { ...payload, id };
-      newSession = {
-        ...session,
-        cart:
-          idx < 0
-            ? [...session.cart, newItem]
-            : replaceElement(session.cart, idx, newItem),
-      };
+      // const newItem = { ...payload, id };
+      // newSession = {
+      //   ...session,
+      //   cart:
+      //     idx < 0
+      //       ? [...session.cart, newItem]
+      //       : replaceElement(session.cart, idx, newItem),
+      // };
       // localStorage.setItem('SESSION', JSON.stringify(newSession));
       // sessionBrowserStorage.set(newSession);
       // return newSession;
+      newSession = payload;
       break;
     }
     case 'REMOVE_CART': {
@@ -101,13 +96,24 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
-  const logout = () => dispatchSession({ type: 'LOGOUT' });
+  const logout = () => dispatchSession({ type: 'LOGOUT', payload: null });
 
   const removeCartItem = (itemId: number) =>
     dispatchSession({ type: 'REMOVE_CART', payload: itemId });
 
-  const saveCartItem = (item: { id?: number; name: string; price: number }) =>
-    dispatchSession({ type: 'SAVE_CART', payload: item });
+  const saveCartItem = (item: { id?: number; name: string; price: number }) => {
+    const id = item.id || Math.max(...session.cart.map(({ id }) => id), 0) + 1;
+    const idx = session.cart.findIndex(({ id: itemId }) => itemId === id);
+    const newItem = { ...item, id };
+    const newSession = {
+      ...session,
+      cart:
+        idx < 0
+          ? [...session.cart, newItem]
+          : replaceElement(session.cart, idx, newItem),
+    };
+    dispatchSession({ type: 'SAVE_CART', payload: newSession });
+  };
 
   /* useState */
   // const login = (loginUser: { id: number; name: string }) => {

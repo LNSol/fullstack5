@@ -5,6 +5,7 @@ import './App.css';
 import { useCounter } from './hooks/counter-context';
 import { SessionProvider } from './hooks/session-context';
 import { useCallback } from 'react';
+import StyledBox from './components/StyledBox';
 
 function App() {
   console.log('App@@@');
@@ -29,6 +30,7 @@ function App() {
         <h3>반갑습니다~</h3>
       </MemoedHello> */}
       <button onClick={plusCount}>count + 1</button>
+      <StyledBox />
     </>
   );
 }

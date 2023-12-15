@@ -1,0 +1,10 @@
+.bg-green {
+  background-color: green;
+}
+.bg-green:hover {
+  background-color: orange;
+}
+
+.border {
+  border: 3px solid blue;
+}

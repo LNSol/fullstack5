@@ -6,7 +6,7 @@ const cx = classnames.bind(styles);
 
 type BoxProps = {
   bg: string;
-  highlight?: boolean;
+  highlight?: string;
 };
 
 const Box = styled.div<BoxProps>`
@@ -30,7 +30,7 @@ const StyledBox = () => {
   return (
     <>
       {/* <Box bg='yellow' highlight> */}
-      <BorderBox bg='yellow' highlight>
+      <BorderBox bg='yellow' highlight='true'>
         <h2>styled-components</h2>
       </BorderBox>
       <div className={cx('bg-green', { border: true })}>

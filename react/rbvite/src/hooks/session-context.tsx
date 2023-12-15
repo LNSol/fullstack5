@@ -10,8 +10,10 @@ import {
 import { DefaultSession } from '../dummy';
 import { replaceElement } from '../utils/utils';
 import { useFetch } from './fetch-hook';
-import { BrowserStorage } from '../data/browser-storage/browser-storage';
-import { SessionMapper } from '../data/browser-storage/browser-mappers';
+// import { BrowserStorage } from '../data/browser-storage/browser-storage';
+// import { SessionMapper } from '../data/browser-storage/browser-mappers';
+// import { SessionBrowserStorageTest } from '../data/browser-storage/browser-storage-test';
+import { STORAGE_KEY, browserStorage } from '../utils/browser-storage';
 
 type SessionContextType = {
   session: Session;
@@ -29,9 +31,18 @@ const SessionContext = createContext<SessionContextType>({
   saveCartItem: () => {},
 });
 
-const sessionBrowserStorage = new BrowserStorage<Session>(
-  'SESSION',
-  new SessionMapper()
+/* use BrowserStorage and BrowserStorageMapper */
+// const sessionBrowserStorage = new BrowserStorage<Session>(
+//   'SESSION',
+//   new SessionMapper()
+// );
+
+/* use SessionBrowserStorageTest */
+// const sessionBrowserStorage = new SessionBrowserStorageTest('SESSION');
+
+/* use browserStorage function */
+const { get: getSession, set: setSession } = browserStorage<Session>(
+  STORAGE_KEY.SESSION
 );
 
 type SessionReducer = (session: Session, action: SessionAction) => Session;
@@ -78,7 +89,8 @@ const reducer: SessionReducer = (session, { type, payload }) => {
     case 'SET':
       newSession = { ...payload };
   }
-  sessionBrowserStorage.set(newSession);
+  // sessionBrowserStorage.set(newSession);
+  setSession(newSession);
   return newSession;
 };
 
@@ -88,6 +100,7 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
     reducer,
     DefaultSession
   );
+  // const { get: getSession, set: setSession } = useStorage<Session>('SESSION'); // hook으로 사용하면 reducer에서 set할 수가 없음.
   const data = useFetch<Session>('/data/sample.json');
 
   const login = useCallback(
@@ -155,7 +168,8 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
   // };
 
   useEffect(() => {
-    const sessionInStorage = sessionBrowserStorage.get();
+    // const sessionInStorage = sessionBrowserStorage.get();
+    const sessionInStorage = getSession();
     // const sessionInStorage = JSON.parse(localStorage.getItem('SESSION') || '');
     if (sessionInStorage) {
       dispatchSession({ type: 'SET', payload: sessionInStorage });

@@ -3,13 +3,11 @@ export enum STORAGE_KEY {
 }
 
 export function browserStorage<T>(key: STORAGE_KEY) {
-  const get = (): T | void => {
+  const get = (): T | null => {
     const item = localStorage.getItem(key);
-    if (item) {
-      const data = JSON.parse(item);
-      return data;
-    }
+    return item ? JSON.parse(item) : null;
   };
+
   const set = (data: T): void => {
     localStorage.setItem(key, JSON.stringify(data));
   };

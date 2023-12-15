@@ -11,7 +11,7 @@ export class BrowserStorage<T> {
 
   get(): T | void {
     const item = localStorage.getItem(this.key);
-    if (item) return this.mapper.fromJson(localStorage.getItem(this.key));
+    if (item) return this.mapper.fromJson(item);
   }
   set(data: T) {
     localStorage.setItem(this.key, this.mapper.toJson(data));

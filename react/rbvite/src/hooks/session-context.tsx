@@ -156,6 +156,8 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
     } else if (data) {
       dispatchSession({ type: 'SET', payload: data });
     }
+
+    // dispatchSession({ type: 'SET', payload: session });
   }, [data]);
 
   // useEffect(() => {
